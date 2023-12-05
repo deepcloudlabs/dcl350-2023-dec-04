@@ -17,6 +17,7 @@ import com.example.hr.dto.request.HireEmployeeRequest;
 import com.example.hr.dto.response.EmployeeResponse;
 import com.example.hr.dto.response.HireEmployeeResponse;
 import com.example.hr.service.HrService;
+import com.example.validation.TcKimlikNo;
 
 @Adapter(port=HrApplication.class)
 @RestController
@@ -33,19 +34,22 @@ public class HrRestController {
 
 	// GET /employees/11111111110
 	@GetMapping("{identity}")
-	public EmployeeResponse getEmployee(@PathVariable String identity) {
+	public EmployeeResponse getEmployee(
+			@PathVariable @TcKimlikNo String identity) {
 		return hrService.findEmployeeById(identity);
 	}
 	
 	// POST /employees
 	@PostMapping
-	public HireEmployeeResponse hireEmployee(@RequestBody HireEmployeeRequest request) {
+	public HireEmployeeResponse hireEmployee(
+			@RequestBody @Validated HireEmployeeRequest request) {
 		return hrService.hireEmployee(request);		
 	}
 	
 	// DELETE /employees/11111111110
 	@DeleteMapping("{identity}")
-	public EmployeeResponse fireEmployee(@PathVariable String identity) {
+	public EmployeeResponse fireEmployee(
+			@PathVariable @TcKimlikNo String identity) {
 		return hrService.fireEmployee(identity);				
 	}	
 }
