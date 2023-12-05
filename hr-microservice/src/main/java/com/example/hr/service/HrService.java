@@ -1,7 +1,6 @@
 package com.example.hr.service;
 
 import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,7 +22,6 @@ public class HrService {
 		this.modelMapper = modelMapper;
 	}
 
-	@Cacheable
 	public EmployeeResponse findEmployeeById(String identity) {
 		var kimlik = TcKimlikNo.valueOf(identity);
 		Employee employee = hrApplication.getEmployee(kimlik)
@@ -40,8 +38,8 @@ public class HrService {
 
 	@Transactional
 	public EmployeeResponse fireEmployee(String identity) {
-		// TODO Auto-generated method stub
-		return null;
+		var employee = hrApplication.fireEmployee(TcKimlikNo.valueOf(identity));
+		return modelMapper.map(employee, EmployeeResponse.class);
 	}
 
 }
