@@ -1,6 +1,7 @@
 package com.example.hr.domain;
 
 import java.util.Arrays;
+import java.util.Base64;
 import java.util.Objects;
 
 import com.example.ddd.ValueObject;
@@ -15,6 +16,10 @@ public final class Photo {
 	
 	public byte[] getValues() {
 		return Arrays.copyOf(values, values.length);
+	}
+	
+	public String getBase64Values() {
+		return Base64.getEncoder().encodeToString(values);
 	}
 
 	public static Photo of(byte[] values) {
