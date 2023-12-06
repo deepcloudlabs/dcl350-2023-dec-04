@@ -26,6 +26,7 @@ public class ModelMapperConfig {
     	response.setJobStyle(employee.getJobStyle());
     	response.setDepartments(employee.getDepartments());
     	response.setBirthYear(employee.getBirthYear().value());
+    	response.setPhoto(employee.getPhoto().getBase64Values());
     	return response;
     };			
     private static final Converter<Employee,HireEmployeeResponse> EMPLOYEE_TO_HIRE_EMPLOYEE_RESPONSE_CONVERTER =
@@ -41,6 +42,7 @@ public class ModelMapperConfig {
 		response.setJobStyle(employee.getJobStyle());
 		response.setDepartments(employee.getDepartments());
 		response.setBirthYear(employee.getBirthYear().value());
+		response.setPhoto(employee.getPhoto().getBase64Values());
 		return response;
 	};			
 	private static final Converter<Employee,EmployeeEntity> EMPLOYEE_TO_EMPLOYEE_ENTITY_CONVERTER =
@@ -56,6 +58,7 @@ public class ModelMapperConfig {
 		entity.setJobStyle(employee.getJobStyle());
 		entity.setDepartments(employee.getDepartments());
 		entity.setBirthYear(employee.getBirthYear().value());
+		entity.setPhoto(employee.getPhoto().getValues());
 		return entity;
 	};			
 	

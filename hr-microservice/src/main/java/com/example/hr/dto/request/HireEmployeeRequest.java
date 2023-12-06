@@ -19,7 +19,7 @@ public class HireEmployeeRequest {
     private String firstName;
     @NotBlank
     private String lastName;
-    @DecimalMin(value = "12_000.0")
+    @DecimalMin(value = "12000.0")
     private double salary;
     @NotNull
     private FiatCurrency currency;

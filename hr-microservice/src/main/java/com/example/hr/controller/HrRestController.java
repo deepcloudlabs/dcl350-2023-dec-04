@@ -52,4 +52,5 @@ public class HrRestController {
 			@PathVariable @TcKimlikNo String identity) {
 		return hrService.fireEmployee(identity);				
 	}	
+	
 }
