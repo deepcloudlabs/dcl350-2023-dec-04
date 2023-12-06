@@ -1,8 +1,9 @@
-package com.example.hr.adapter;
+package com.example.hr.service;
 
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Service;
 
 import com.example.hexagonal.Adapter;
@@ -13,13 +14,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Adapter(port=EventPublisher.class)
 @Service
-@ConditionalOnProperty(name = "messaging",havingValue = "rabbit")
-public class EventPublisherRabbitAdapter implements EventPublisher<HrEvent> {
+@ConditionalOnProperty(name = "use-messaging",havingValue = "rabbit")
+public class RabbitEventPublisherService {
 	private final RabbitTemplate rabbitTemplate;
 	private final String exchangeName;
 	private final ObjectMapper objectMapper;
 	
-	public EventPublisherRabbitAdapter(
+	public RabbitEventPublisherService(
 			RabbitTemplate rabbitTemplate, 
 			@Value("${exchangeName}") String exchangeName, 
 			ObjectMapper objectMapper) {
@@ -28,7 +29,7 @@ public class EventPublisherRabbitAdapter implements EventPublisher<HrEvent> {
 		this.objectMapper = objectMapper;
 	}
 
-	@Override
+	@EventListener
 	public void publish(HrEvent event) {
 		try {
 			var eventAsJson = objectMapper.writeValueAsString(event);
