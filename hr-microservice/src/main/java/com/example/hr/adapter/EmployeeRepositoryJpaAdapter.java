@@ -4,6 +4,7 @@ import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hexagonal.Adapter;
@@ -36,7 +37,7 @@ public class EmployeeRepositoryJpaAdapter implements EmployeeRepository {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public Employee create(Employee employee) {
 		var employeeEntity = modelMapper.map(employee, EmployeeEntity.class);
 		var createdEmployeeEntity = employeeEntityRepository.save(employeeEntity);

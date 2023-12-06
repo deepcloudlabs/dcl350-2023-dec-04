@@ -1,8 +1,8 @@
 package com.example.hr.adapter;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
 import com.example.hr.application.business.event.HrEvent;
@@ -11,18 +11,18 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
-@ConditionalOnProperty(name = "messaging",havingValue = "kafka")
-public class EventPublisherKafkaAdapter implements EventPublisher<HrEvent> {
-	private final KafkaTemplate<String, String> kafkaTemplate;
-	private final String topicName;
+@ConditionalOnProperty(name = "messaging",havingValue = "rabbit")
+public class EventPublisherRabbitAdapter implements EventPublisher<HrEvent> {
+	private final RabbitTemplate rabbitTemplate;
+	private final String exchangeName;
 	private final ObjectMapper objectMapper;
 	
-	public EventPublisherKafkaAdapter(
-			KafkaTemplate<String, String> kafkaTemplate, 
-			@Value("${topicName}") String topicName, 
+	public EventPublisherRabbitAdapter(
+			RabbitTemplate rabbitTemplate, 
+			@Value("${exchangeName}") String exchangeName, 
 			ObjectMapper objectMapper) {
-		this.kafkaTemplate = kafkaTemplate;
-		this.topicName = topicName;
+		this.rabbitTemplate = rabbitTemplate;
+		this.exchangeName = exchangeName;
 		this.objectMapper = objectMapper;
 	}
 
@@ -30,7 +30,7 @@ public class EventPublisherKafkaAdapter implements EventPublisher<HrEvent> {
 	public void publish(HrEvent event) {
 		try {
 			var eventAsJson = objectMapper.writeValueAsString(event);
-			kafkaTemplate.send(topicName, eventAsJson);		
+			rabbitTemplate.convertAndSend(exchangeName,null, eventAsJson);		
 		} catch (JsonProcessingException e) {
 			System.err.println("Error while converting object to json: %s".formatted(e.getMessage()));
 		}
