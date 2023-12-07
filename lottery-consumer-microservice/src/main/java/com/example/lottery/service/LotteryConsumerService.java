@@ -17,7 +17,7 @@ import jakarta.annotation.PostConstruct;
 public class LotteryConsumerService {
 	private final DiscoveryClient discoveryClient;
 	private List<ServiceInstance> instances;
-	private static final String LOTTERY_URL = "http://%s:%d/lottery/api/v1/numbers?column=5";
+	private static final String LOTTERY_URL = "http://%s:%d/api/v1/numbers?column=5";
 	private final AtomicInteger counter = new AtomicInteger();
 	
 	public LotteryConsumerService(DiscoveryClient discoveryClient) {
