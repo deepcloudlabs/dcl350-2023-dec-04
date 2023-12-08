@@ -51,7 +51,7 @@ public class CrmReactiveService {
 	}
 
 	public Mono<CustomerDocument> releaseCustomer(String email) {
-		return customerDocumentRepository.findById(email)
+		return customerDocumentRepository.findOneByEmail(email)
 			    .doOnSuccess(
 			    		foundCustomer->{
 			    			customerDocumentRepository.delete(foundCustomer)
