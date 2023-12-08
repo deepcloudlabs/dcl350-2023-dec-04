@@ -14,7 +14,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
-import jakarta.persistence.Version;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
@@ -49,6 +48,5 @@ public class EmployeeEntity {
     @Lob
     @Column(columnDefinition = "longblob")
     private byte[] photo;
-    @Version
-    private int version;
+
 }

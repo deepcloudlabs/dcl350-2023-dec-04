@@ -9,40 +9,40 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.example.hexagonal.Adapter;
+import com.example.hr.document.EmployeeDocument;
 import com.example.hr.domain.Employee;
 import com.example.hr.domain.TcKimlikNo;
-import com.example.hr.entity.EmployeeEntity;
-import com.example.hr.repository.EmployeeEntityRepository;
+import com.example.hr.repository.EmployeeDocumentRepository;
 import com.example.hr.repository.EmployeeRepository;
 
 @Adapter(port = EmployeeRepository.class)
 @Repository
-@ConditionalOnProperty(name="persistence",havingValue = "jpa")
-public class EmployeeRepositoryJpaAdapter implements EmployeeRepository {
-	private final EmployeeEntityRepository employeeEntityRepository;
+@ConditionalOnProperty(name="persistence",havingValue = "mongo")
+public class EmployeeRepositoryMongoAdapter implements EmployeeRepository {
+	private final EmployeeDocumentRepository employeeDocumentRepository;
 	private final ModelMapper modelMapper;
 	
-	public EmployeeRepositoryJpaAdapter(EmployeeEntityRepository employeeEntityRepository, ModelMapper modelMapper) {
-		this.employeeEntityRepository = employeeEntityRepository;
+	public EmployeeRepositoryMongoAdapter(EmployeeDocumentRepository employeeDocumentRepository, ModelMapper modelMapper) {
+		this.employeeDocumentRepository = employeeDocumentRepository;
 		this.modelMapper = modelMapper;
 	}
 
 	@Override
 	public Optional<Employee> findEmployeeByIdentity(TcKimlikNo identity) {
-		var employeeEntity = employeeEntityRepository.findById(identity.getValue());		
+		var employeeEntity = employeeDocumentRepository.findById(identity.getValue());		
 		return Optional.ofNullable(modelMapper.map(employeeEntity,Employee.class));
 	}
 
 	@Override
 	public boolean existsByIdentity(TcKimlikNo identity) {
-		return employeeEntityRepository.existsById(identity.getValue());
+		return employeeDocumentRepository.existsById(identity.getValue());
 	}
 
 	@Override
 	@Transactional(propagation = Propagation.REQUIRES_NEW)
 	public Employee create(Employee employee) {
-		var employeeEntity = modelMapper.map(employee, EmployeeEntity.class);
-		var createdEmployeeEntity = employeeEntityRepository.save(employeeEntity);
+		var employeeDocument = modelMapper.map(employee, EmployeeDocument.class);
+		var createdEmployeeEntity = employeeDocumentRepository.insert(employeeDocument);
 		return modelMapper.map(createdEmployeeEntity, Employee.class);
 	}
 
@@ -50,7 +50,7 @@ public class EmployeeRepositoryJpaAdapter implements EmployeeRepository {
 	@Transactional
 	public void remove(Employee employee) {
 		TcKimlikNo identity = employee.getIdentity();
-		employeeEntityRepository.deleteById(identity .getValue());
+		employeeDocumentRepository.deleteById(identity .getValue());
 	}
 
 }
