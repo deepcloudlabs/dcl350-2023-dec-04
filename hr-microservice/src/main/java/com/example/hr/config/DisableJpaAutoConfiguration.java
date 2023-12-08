@@ -1,4 +1,4 @@
-package com.example.hr.adapter;
+package com.example.hr.config;
 
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
