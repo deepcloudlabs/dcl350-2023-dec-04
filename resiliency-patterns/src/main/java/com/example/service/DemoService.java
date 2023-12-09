@@ -13,6 +13,8 @@ public class DemoService {
 
 	@Scheduled(fixedRate = 300)
 	public void callBusinessMethod() {
-		System.out.println("Response from business service: %d".formatted(businessService.fun()));
+		businessService.methodA()
+		.thenAcceptAsync(number -> System.err.println("Number is received: %d".formatted(number)));
+		//System.out.println("Response from business service: %d".formatted(businessService.sun()));
 	}
 }
